@@ -1,15 +1,13 @@
 function main () {
-  const tmp = process.argv.slice(2, 6).map((n) => n.replace(/^-(.+)/, '$1'))
-  const paramsArray = [...Array(2)].map((_, i) => tmp.slice(i * 2, i * 2 + 2))
-  const params = Object.fromEntries(paramsArray)
+  const params = require('minimist')(process.argv.slice(2))
 
   const year = params.y ? params.y : new Date().getFullYear()
   const month = params.m ? params.m : new Date().getMonth() + 1
 
-  console.log(generateCal(year, month))
+  console.log(generate(year, month))
 }
 
-function generateCal (year, month) {
+function generate (year, month) {
   return [
     `       ${month}月 ${year}`,
     '日 月 火 水 木 金 土',
@@ -26,7 +24,7 @@ function body (year, month) {
   const concatDays = blanks.concat(days)
   const rjustDays = concatDays.map(n => n.padStart(2, ' '))
 
-  const weeks = [...Array(6)].map((_, i) => {
+  const weeks = [...Array(6)].map((_, i) => { // calコマンドに合わせて6週間分を生成する
     const start = i * 7 // 第i週
     const end = start + 7 // 第i週の7日分
     return rjustDays.slice(start, end).join(' ')
