@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>fetch</title>
+</head>
+<body>
+  <script>
+    (async () => {
+      try {
+        const res = await fetch('https://bootcamp.fjord.jp/')
+        if (!res.ok) throw new Error(`${res.status}: ${res.statusText}`)
+
+        const text = await res.text()
+        console.log(text.replace(/>/g, '>\n'))
+      } catch (err) {
+        console.log(err)
+      }
+    })()
+  </script>
+</body>
+</html>
