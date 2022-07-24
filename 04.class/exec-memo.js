@@ -42,7 +42,7 @@ const main = async () => {
     const memos = await Memo.all()
     if (memos.length === 0) return
 
-    const prompt = selectPrompt(memos, { optMsg: 'see' })
+    const prompt = selectPrompt(memos, { optMsg: 'delete' })
     const idx = await prompt.run()
     await Memo.destroy(memos[idx].id)
   } else {
