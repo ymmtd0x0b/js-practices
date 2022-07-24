@@ -1,6 +1,6 @@
 const { Select } = require('enquirer')
 
-class SelectWithContent extends Select {
+class SelectExtendFooter extends Select {
   async submit () {
     this.state.submitted = true
     this.state.validating = true
@@ -41,4 +41,4 @@ class SelectWithContent extends Select {
   }
 }
 
-module.exports = SelectWithContent
+module.exports = SelectExtendFooter
