@@ -1,27 +1,21 @@
 const { Select } = require('enquirer')
 
-exports.selectPrompt = async (cache, type) => {
-  const fdata = formatData(cache)
-  const selectedIdx = await buildSelectPrompt(fdata, type).run()
+exports.selectPrompt = (memos, type) => {
+  const selectedIdx = buildSelectPrompt(memos, type).run()
   return selectedIdx
 }
 
-const formatData = (cache) => {
+const buildSelectPrompt = (memos, type) => {
   const data = []
-  for (const idx in cache) {
-    const lines = cache[idx].content.split('\n')
-
-    const line = lines[0]
+  for (const idx in memos) {
+    const lines = memos[idx].content.split('\n')
     data.push(
       {
-        name: line,
+        name: lines[0],
         footer: lines.slice(1).join('\n')
       })
   }
-  return data
-}
 
-const buildSelectPrompt = (data, type) => {
   return new SelectWithContent({
     name: 'Choice',
     message: `Choose a note you want to ${type}:`,
