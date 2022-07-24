@@ -1,28 +1,5 @@
 const { Select } = require('enquirer')
 
-exports.selectPrompt = (memos, type) => {
-  const selectedIdx = buildSelectPrompt(memos, type).run()
-  return selectedIdx
-}
-
-const buildSelectPrompt = (memos, type) => {
-  const data = []
-  for (const idx in memos) {
-    const lines = memos[idx].content.split('\n')
-    data.push(
-      {
-        name: lines[0],
-        footer: lines.slice(1).join('\n')
-      })
-  }
-
-  return new SelectWithContent({
-    name: 'Choice',
-    message: `Choose a note you want to ${type}:`,
-    choices: data
-  })
-}
-
 class SelectWithContent extends Select {
   async submit () {
     this.state.submitted = true
@@ -63,3 +40,5 @@ class SelectWithContent extends Select {
     return '\n' + this.selected.footer // ここをオーバーライド
   }
 }
+
+module.exports = SelectWithContent

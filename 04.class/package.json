@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "enquirer": "^2.3.6",
-    "sqlite3": "^5.0.9",
-    "yosay": "^2.0.2"
+    "sqlite3": "^5.0.9"
   }
 }
