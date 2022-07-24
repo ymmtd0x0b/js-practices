@@ -1,56 +1,71 @@
 const { Select } = require('enquirer')
 
-class SelectWithChoicesInfo extends Select {
-  constructor (options = {}) {
-    super(options)
-    this.idx = 0
-    this.max_idx = this.choices.length - 1
-  }
-
-  up () {
-    this.idx--
-    if (this.idx < 0) {
-      this.idx = this.max_idx
-    }
-    super.up()
-  }
-
-  down () {
-    this.idx++
-    if (this.idx > this.max_idx) {
-      this.idx = 0
-    }
-    super.down()
-  }
-
-  footer () {
-    if (this.state.submitted && !this.state.cancelled) return ''
-    return '\n'.concat(this.choices[this.idx].name)
-  }
+exports.selectPrompt = async (cache, type) => {
+  const fdata = formatData(cache)
+  const selectedIdx = await buildSelectPrompt(fdata, type).run()
+  return selectedIdx
 }
 
-const select = (data) => {
-  return new SelectWithChoicesInfo({
-    name: 'Choice',
-    message: 'Choose a note you want to see:',
-    choices: data
-  })
-}
-
-function formatData (cache) {
+const formatData = (cache) => {
   const data = []
   for (const idx in cache) {
-    const id = `${idx}) `
-    const text = `${cache[idx].content.split('\n', 1)}`
-    data.push({ name: id + text, value: idx })
+    const lines = cache[idx].content.split('\n')
+
+    const line = lines[0]
+    data.push(
+      {
+        name: line,
+        footer: lines.slice(1).join('\n')
+      })
   }
   return data
 }
 
-exports.selectPrompt = async (data) => {
-  const fdata = formatData(data)
-  const dataName = await select(fdata).run()
-  const selectedData = fdata.find(d => d.name === dataName)
-  return selectedData.value
+const buildSelectPrompt = (data, type) => {
+  return new SelectWithContent({
+    name: 'Choice',
+    message: `Choose a note you want to ${type}:`,
+    choices: data
+  })
 }
-// selectPrompt(memos)
+
+class SelectWithContent extends Select {
+  async submit () {
+    this.state.submitted = true
+    this.state.validating = true
+
+    if (this.options.onSubmit) {
+      await this.options.onSubmit.call(this, this.name, this.value, this)
+    }
+
+    const result = this.state.error || await this.validate(this.value, this.state)
+    if (result !== true) {
+      let error = '\n' + this.symbols.pointer + ' '
+
+      if (typeof result === 'string') {
+        error += result.trim()
+      } else {
+        error += 'Invalid input'
+      }
+
+      this.state.error = '\n' + this.styles.danger(error)
+      this.state.submitted = false
+      await this.render()
+      await this.alert()
+      this.state.validating = false
+      this.state.error = undefined
+      return
+    }
+
+    this.state.validating = false
+    await this.render()
+    await this.close()
+
+    this.emit('submit', this.index) // ここをオーバーライド
+  }
+
+  footer () {
+    if (this.state.submitted && !this.state.cancelled) return ''
+    return '\n' + this.selected.footer // ここをオーバーライド
+  }
+}
