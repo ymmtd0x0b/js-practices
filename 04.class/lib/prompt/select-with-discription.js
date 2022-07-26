@@ -1,6 +1,6 @@
 const { Select } = require('enquirer')
 
-class SelectExtendFooter extends Select {
+class SelectWithDiscription extends Select {
   async submit () {
     this.state.submitted = true
     this.state.validating = true
@@ -32,13 +32,13 @@ class SelectExtendFooter extends Select {
     await this.render()
     await this.close()
 
-    this.emit('submit', this.index) // ここをオーバーライド
+    this.emit('submit', this.index) // オーバーライド部分
   }
 
   footer () {
     if (this.state.submitted && !this.state.cancelled) return ''
-    return '\n' + this.selected.footer // ここをオーバーライド
+    return '\n' + this.selected.discription // オーバーライド部分
   }
 }
 
-module.exports = SelectExtendFooter
+module.exports = SelectWithDiscription

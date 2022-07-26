@@ -1,24 +1,6 @@
 const fs = require('fs')
-const ExtendedSelect = require('./lib/prompt/select-extend-footer.js')
+const SelectWithDiscription = require('./lib/prompt/select-with-discription.js')
 const Memo = require('./lib/memo.js')
-
-const selectPrompt = (memos, { optMsg }) => {
-  const data = []
-  for (const idx in memos) {
-    const lines = memos[idx].text.split('\n')
-    data.push(
-      {
-        name: lines[0],
-        footer: lines.slice(1).join('\n')
-      })
-  }
-
-  return new ExtendedSelect({
-    name: 'Choice',
-    message: `Choose a note you want to ${optMsg}:`,
-    choices: data
-  })
-}
 
 const main = async () => {
   const opts = require('minimist')(process.argv.slice(2))
@@ -36,6 +18,7 @@ const main = async () => {
 
     const prompt = selectPrompt(memos, { optMsg: 'see' })
     const idx = await prompt.run()
+
     const memo = memos[idx]
     console.log(`\n${memo.text}`)
   } else if (opts.d) {
@@ -44,6 +27,7 @@ const main = async () => {
 
     const prompt = selectPrompt(memos, { optMsg: 'delete' })
     const idx = await prompt.run()
+
     await Memo.destroy(memos[idx].id)
   } else {
     const inputData = fs.readFileSync('/dev/stdin', 'utf8')
@@ -52,4 +36,23 @@ const main = async () => {
 
   await Memo.close()
 }
+
+const selectPrompt = (memos, { optMsg }) => {
+  const data = []
+  for (const idx in memos) {
+    const lines = memos[idx].text.split('\n')
+    data.push(
+      {
+        name: lines[0],
+        discription: lines.slice(1).join('\n')
+      })
+  }
+
+  return new SelectWithDiscription({
+    name: 'Choice',
+    message: `Choose a note you want to ${optMsg}:`,
+    choices: data
+  })
+}
+
 main()
