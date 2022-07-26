@@ -5,6 +5,8 @@ const Memo = require('./lib/memo.js')
 const main = async () => {
   const opts = require('minimist')(process.argv.slice(2))
 
+  await Memo.open()
+
   if (opts.l) {
     const memos = await Memo.all()
 
