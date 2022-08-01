@@ -1,10 +1,9 @@
+const opts = require('minimist')(process.argv)
 const fs = require('fs')
 const SelectWithDiscription = require('./lib/prompt/select-with-discription.js')
 const Memo = require('./lib/memo.js')
 
 const main = async () => {
-  const opts = require('minimist')(process.argv.slice(2))
-
   await Memo.open()
 
   if (opts.l) {
