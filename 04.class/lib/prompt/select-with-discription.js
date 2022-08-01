@@ -11,7 +11,7 @@ class SelectWithDiscription extends Select {
 
     const result = this.state.error || await this.validate(this.value, this.state)
     if (result !== true) {
-      let error = '\n' + this.symbols.pointer + ' '
+      let error = `\n ${this.symbols.pointer} `
 
       if (typeof result === 'string') {
         error += result.trim()
@@ -19,7 +19,7 @@ class SelectWithDiscription extends Select {
         error += 'Invalid input'
       }
 
-      this.state.error = '\n' + this.styles.danger(error)
+      this.state.error = `\n${this.styles.danger(error)}`
       this.state.submitted = false
       await this.render()
       await this.alert()
@@ -37,7 +37,7 @@ class SelectWithDiscription extends Select {
 
   footer () {
     if (this.state.submitted && !this.state.cancelled) return ''
-    return '\n' + this.selected.discription // オーバーライド部分
+    return `\n${this.selected.discription}` // オーバーライド部分
   }
 }
 
