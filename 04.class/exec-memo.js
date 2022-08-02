@@ -3,7 +3,7 @@ const fs = require('fs')
 const MemoExecutor = require('./lib/memo/memo-executor.js')
 
 const main = async () => {
-  MemoExecutor.build()
+  await MemoExecutor.build()
 
   if (opts.l) {
     await MemoExecutor.showList()
@@ -16,7 +16,7 @@ const main = async () => {
     await MemoExecutor.add(inputData)
   }
 
-  MemoExecutor.destroy()
+  await MemoExecutor.destroy()
 }
 
 main()
