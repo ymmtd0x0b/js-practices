@@ -1,4 +1,4 @@
-const SelectWithDiscription = require('./prompt/select-with-discription.js')
+const SelectWithDiscription = require('../prompt/select-with-discription.js')
 const Memo = require('./memo.js')
 
 class MemoExecutor {

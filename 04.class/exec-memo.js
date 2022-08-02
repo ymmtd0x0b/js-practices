@@ -1,6 +1,6 @@
 const opts = require('minimist')(process.argv)
 const fs = require('fs')
-const MemoExecutor = require('./lib/memo-executor.js')
+const MemoExecutor = require('./lib/memo/memo-executor.js')
 
 const main = async () => {
   MemoExecutor.build()
