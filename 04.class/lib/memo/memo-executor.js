@@ -12,6 +12,7 @@ class MemoExecutor {
 
   static async showList () {
     const memos = await Memo.all()
+    if (memos.length === 0) throw new Error('データがありません')
 
     for (const idx in memos) {
       const line = memos[idx].text.split('\n')[0]
@@ -21,7 +22,7 @@ class MemoExecutor {
 
   static async showReview () {
     const memos = await Memo.all()
-    if (memos.length === 0) return
+    if (memos.length === 0) throw new Error('データがありません')
 
     const prompt = this.#selectPrompt(memos, { optMsg: 'see' })
     const idx = await prompt.run()
@@ -32,7 +33,7 @@ class MemoExecutor {
 
   static async delete () {
     const memos = await Memo.all()
-    if (memos.length === 0) return
+    if (memos.length === 0) throw new Error('データがありません')
 
     const prompt = this.#selectPrompt(memos, { optMsg: 'delete' })
     const idx = await prompt.run()
