@@ -5,19 +5,21 @@ const MemoExecutor = require('./lib/memo/memo-executor.js')
 const main = async () => {
   await MemoExecutor.build()
 
-  try {
-    if (opts.l) {
-      await MemoExecutor.showList()
-    } else if (opts.r) {
-      await MemoExecutor.showReview()
-    } else if (opts.d) {
-      await MemoExecutor.delete()
-    } else {
-      const inputData = fs.readFileSync('/dev/stdin', 'utf8')
-      await MemoExecutor.add(inputData)
-    }
-  } catch (e) {
-    console.log(e.message)
+  if (opts.l) {
+    await MemoExecutor.showList().catch(err => {
+      console.log(err.message)
+    })
+  } else if (opts.r) {
+    await MemoExecutor.showReview().catch(err => {
+      console.log(err.message)
+    })
+  } else if (opts.d) {
+    await MemoExecutor.delete().catch(err => {
+      console.log(err.message)
+    })
+  } else {
+    const inputData = fs.readFileSync('/dev/stdin', 'utf8')
+    await MemoExecutor.add(inputData)
   }
 
   await MemoExecutor.destroy()
