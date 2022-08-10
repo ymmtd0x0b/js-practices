@@ -42,7 +42,9 @@ class MemoExecutor {
   }
 
   static async add (data) {
+    console.log(0)
     await Memo.save(data)
+    console.log(4)
   }
 
   static #selectPrompt (memos, { optMsg }) {
